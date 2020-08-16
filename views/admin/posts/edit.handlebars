@@ -1,0 +1,78 @@
+<h1>Edit Post</h1>
+
+
+
+<form action = "/admin/posts/edit/{{editpost._id}}?_method=PUT" method="post" enctype="multipart/form-data" >
+{{!-- method-override 모듈에서 _method로 지정하여 위와 같이 PUT데이터를 전송할 수 있다. --}}
+
+    <div class="form-group">
+
+        <label for = "title">Title</label>
+        <input required name = "title" type = "text" class="form-control" id = "title" placeholder = "{{editpost.title}}" value = "{{editpost.title}}">
+
+    </div>
+
+
+    <div class="form-group">
+
+            <label for = "file">File Upload</label>
+            <input name = "file" type = "file" class="form-control">
+
+    </div>
+
+    <div class="form-group">
+
+        <label for ="category">Category</label>
+        
+        <select name= "category" id = "category" class="form-control">
+            {{#select editpost.category}}
+                {{#each categories}}               
+                 <option value="{{_id}}">{{name}}</option>                
+                {{/each}}
+            {{/select}}
+        </select>
+
+    </div>
+
+    {{!-- helpers 폴더에서 select라는 regExp 함수를 만들어 기존의 선택된 항목이 edit창
+    에서도 그대로 유지될 수 있게 만들었다 --}}
+
+    <div class="form-group">
+
+        <label for ="status">Status</label>
+        
+        <select name= "status" id = "status" class="form-control">
+
+        {{#select editpost.status}}
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+            <option value="Draft">Draft</option>
+        {{/select}}
+
+
+        </select>
+
+    </div>
+
+
+    <div class = "form-check">
+
+        <label for = "allowComments" class = 'form-check-label'>
+        <input name = "allowComments" type="checkbox"  {{#if editpost.allowComments  }} checked = "checked" {{/if}} class = "form-check-input" id = "allowComments"> 
+            Allow Comments
+        
+        </label>
+
+    </div>
+
+    <div class="form-group">
+
+        <label for = "body">Body</label>
+        <textarea required name = "body" type = "text" cols = "30" rows = "10" class="form-control" id = "body" placeholder = "{{editpost.body}}" >{{editpost.body}}</textarea>
+
+    </div>
+
+
+    <button type = "submit">Update Post</button>
+
+</form>

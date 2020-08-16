@@ -1,0 +1,52 @@
+<h1>All Posts</h1>
+
+
+
+
+<table class = "table table-bordered">
+
+    <thead>
+        <tr>
+
+            <th>ID</th>
+            <th>File</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Allow Comments</th>
+            <th>Date</th>
+            
+        </tr>
+
+    <tbody>
+
+        {{#each postdata}}
+        {{!-- 위의 #each 루프가 posts.js 에서 render할때 postdata:posts 해준 
+        데이터에 하나씩 반복적으로 접근하게 해준다 --}}
+        <tr>
+
+            <td>{{_id}}</td>
+            <td><img height = 50 src = "/uploads/{{file}}" alt = ""></td>
+            <td>{{title}}</td>
+            <td>{{status}}</td>
+            <td>{{category.name}}</td>
+            <td>{{allowComments}}</td>
+            <td>{{generateTime date 'MMMM Do YYYY'}}</td>
+            <td><a href = "/admin/posts/edit/{{_id}}" class ="btn btn-info">Edit</a></td>
+            <td>
+
+                <form action = "/admin/posts/{{_id}}?_method=DELETE" method = "post">
+                    <button type = "submit" class = "btn btn-danger">DELETE</button>
+                
+                </form>
+
+            </td>
+
+            
+        </tr>
+        {{/each}}
+    {{!-- 데이터베이스에 입력된 레코드들 항목을 출력시키는 방법 --}}
+
+
+
+</table>

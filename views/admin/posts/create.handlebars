@@ -1,0 +1,82 @@
+<h1>Create Post</h1>
+
+{{#each errors}}
+    <div class="alert-danger">
+
+        {{message}}
+
+    </div>
+{{/each}}
+
+<form action = "/admin/posts/create" method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+
+        <label for = "title">Title</label>
+        <input name = "title" type = "text" class="form-control" id = "title" placeholder = "Enter title">
+
+    </div>
+
+    <div class="form-group">
+
+        <label for = "file">File Upload</label>
+        <input name = "file" type = "file" class="form-control">
+
+    </div>
+
+    <div class="form-group">
+
+        <label for ="category">Category</label>
+        
+        <select name= "category" id = "category" class="form-control">
+            {{!-- req.body.category 에서 category를 쓸 수 있는 
+            이유가 위의 name = "category" 이다--}}
+
+            {{#each categories}}
+            <option value="{{_id}}">{{name}}</option>
+            {{!-- value 는 무조건 {{id}}가 아닌 {{_id}}로 해줘야한다!!! --}}
+            {{/each}}
+
+        </select>
+
+    </div>
+
+    <div class="form-group">
+
+        <label for ="status">Status</label>
+        
+        <select name= "status" id = "status" class="form-control" >
+           
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+            <option value="Draft">Draft</option>
+
+
+        </select>
+
+    </div>
+
+
+
+    <div class = "form-check">
+
+        {{!-- 체크빈칸 위치 오류 해결 class = 'form-check-label'--}}
+        <label for = "allowComments" class = 'form-check-label'>
+        <input name = "allowComments" type="checkbox" class = "form-check-input" id = "allowComments"> 
+            Allow Comments
+        
+        </label>
+
+    </div>
+
+    <div class="form-group">
+
+        <label for = "body">Body</label>
+        <textarea name = "body" type = "text" cols = "30" rows = "10" class="form-control" id = "body" placeholder = "Enter Description" ></textarea>
+
+    </div>
+
+
+    <button type = "submit">Create Post</button>
+
+</form>
