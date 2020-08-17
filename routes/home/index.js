@@ -15,7 +15,6 @@ router.all('/*', (req, res, next) => {
 
 });
 
-
 router.get('/', (req, res) => {
 
     Post.find({}).lean().
