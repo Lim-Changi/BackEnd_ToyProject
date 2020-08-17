@@ -5,7 +5,6 @@ const Category = require('../../models/Category');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {verifyToken} = require('../../helpers/jwt-verify');
 const cookieParser = require('cookie-parser');
 
 
@@ -15,7 +14,7 @@ router.all('/*', (req, res, next) => {
     next();
 
 });
-//ㄴㄴㄴㄴ
+
 
 router.get('/', (req, res) => {
 

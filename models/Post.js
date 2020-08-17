@@ -51,9 +51,14 @@ const PostSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId,
         ref: 'categories'
-    }
+    },
 // categories 스키마의 id값을 필드값으로 받는다
 
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'comments'
+
+    }]
 
 });
 
