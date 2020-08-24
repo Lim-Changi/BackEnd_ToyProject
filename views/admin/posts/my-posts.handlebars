@@ -1,4 +1,4 @@
-<h1>All Posts</h1>
+<h1>My Posts</h1>
 
 
 
@@ -34,7 +34,15 @@
             <td>{{allowComments}}</td>
             <td><a href="/post/{{_id}}">Link</a></td>
             <td>{{generateTime date 'MMMM Do YYYY'}}</td>
-            
+            <td><a href = "/admin/posts/edit/{{_id}}" class ="btn btn-info">Edit</a></td>
+            <td>
+
+                <form action = "/admin/posts/{{_id}}?_method=DELETE" method = "post">
+                    <button type = "submit" class = "btn btn-danger">DELETE</button>
+                
+                </form>
+
+            </td>
 
             
         </tr>

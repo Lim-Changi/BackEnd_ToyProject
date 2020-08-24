@@ -13,15 +13,27 @@ const CommentSchema = new Schema({
         ref: 'users'
     },
 
+    post: {
+
+        type: Schema.Types.ObjectId,
+        ref: 'posts'
+
+    },
+
     body : {
 
         type: String,
         required : true
         
+    },
+
+    date : {
+        type: Date,
+        default : Date.now()
     }
 
     
 });
 
 
-module.exports = mongoose.model('categories',CommentSchema);
+module.exports = mongoose.model('comments',CommentSchema);

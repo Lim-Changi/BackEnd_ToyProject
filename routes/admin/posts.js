@@ -13,6 +13,7 @@ router.all('/*',verifyToken, (req, res, next) => {
     //이 파일에서 router을 실행하기전에 우선적으로 실행시켜주는 코드
 
     req.app.locals.layout = 'admin';
+    req.user = req.userData['user'];
     next();
 
 });
@@ -24,7 +25,7 @@ router.get('/create', (req, res) => {
     Category.find({}).lean()
     .then(categories=>{
 
-        res.render('admin/posts/create',{categories:categories});
+        res.render('admin/posts/create',{categories:categories,loggeduser: req.user});
     
     });
 
@@ -36,11 +37,23 @@ router.get('/', (req, res) => {
         .populate('category') //category의 id가 아닌 이름을 출력하기 위함
         .then(posts => {
 
-            res.render('admin/posts/index', { postdata: posts })
+            res.render('admin/posts/index', { postdata: posts, loggeduser: req.user })
             //여기서 postdata:posts 에서 왼쪽 postdata가 flag 역할을 한다
         });
 })
 // handlebars 파일에서 데이터베이스에 있는 레코드를 찾아주는 코드
+
+router.get('/my-posts', (req, res) => {
+
+
+    Post.find({user: req.user._id}).lean()
+        .populate('category') //category의 id가 아닌 이름을 출력하기 위함
+        .then(posts => {
+
+            res.render('admin/posts/my-posts', { postdata: posts, loggeduser: req.user })
+            //여기서 postdata:posts 에서 왼쪽 postdata가 flag 역할을 한다
+        });
+})
 
 
 
@@ -48,10 +61,11 @@ router.get('/edit/:id', (req, res) => {
 
     Post.findOne({ _id: req.params.id }).lean()
         .then(posts => {
+            
             Category.find({}).lean()
                 .then(categories => {
 
-                    res.render('admin/posts/edit', { editpost: posts, categories: categories });
+                    res.render('admin/posts/edit', { editpost: posts, categories: categories,loggeduser: req.user });
 
                 });
         });
@@ -121,10 +135,19 @@ router.put('/edit/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
 
-    Post.findOne({ _id: req.params.id }).lean()
+    Post.findOne({ _id: req.params.id })
+        .populate('comments')
         .then(post => {
 
-            fs.unlink(uploadDir + post.file, () => {});
+            if (!post.comments.length < 1) {
+
+                post.comments.forEach(comment => {
+                    comment.remove();
+                });
+            }
+            // POST 데이터와 연결된 댓글 데이터를 연쇄적으로 다 같이 삭제하는 작업 >>>> lean() 과 같이 쓰면 안된다!!!!!!!!!!!!!!!!!!!!!
+
+            fs.unlink(uploadDir + post.file, () => { });
 
         }).catch(error => {
 
@@ -135,15 +158,17 @@ router.delete('/:id', (req, res) => {
 
     Post.deleteOne({ _id: req.params.id }).lean()
         .then(result => {
-            req.flash('success_message','Post was deleted successfully');
+
+
+            req.flash('success_message', 'Post was deleted successfully');
             res.redirect('/admin/posts');
             console.log('Post Deleted');
-            
+
         }).catch(err => {
             console.log(err);
         })
     //데이터 삭제작업
-   
+
 })
 
 //Saving Data
@@ -197,6 +222,7 @@ router.post('/create', (req, res) => {
         //BOOLEAN 타입을 true/false 로 입력받는 방법
 
         const newPost = new Post({
+            user: req.user,
             title: req.body.title,
             status: req.body.status,
             allowComments: allowComments,

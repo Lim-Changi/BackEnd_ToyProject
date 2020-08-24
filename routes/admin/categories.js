@@ -7,6 +7,7 @@ router.all('/*',verifyToken,(req,res,next)=>{
 //이 파일에서 router을 실행하기전에 우선적으로 실행시켜주는 코드
 
     req.app.locals.layout = 'admin';
+    req.user = req.userData['user'];
     next();
 
 });
@@ -19,7 +20,7 @@ router.get('/', (req, res) => {
     Category.find({}).lean()
         .then(savedCategory => {
 
-            res.render('admin/categories/index',{Catdata:savedCategory})
+            res.render('admin/categories/index',{Catdata:savedCategory,loggeduser: req.user})
             
         });
 })
@@ -48,7 +49,7 @@ router.get('/edit/:id', (req, res) => {
     Category.findOne({ _id: req.params.id }).lean()
         .then(category => {
 
-            res.render('admin/categories/edit',{editcat:category})
+            res.render('admin/categories/edit',{editcat:category,loggeduser: req.user})
         });
 
 

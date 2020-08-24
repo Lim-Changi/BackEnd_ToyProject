@@ -6,6 +6,7 @@ const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const { verifyToken } = require('../../helpers/jwt-verify');
 
 
 router.all('/*', (req, res, next) => {
@@ -171,17 +172,20 @@ router.post('/register', (req, res) => {
 })
 
 
-router.get('/post/:id', (req, res) => {
+router.get('/post/:id',verifyToken, (req, res) => {
 
     Post.findOne({ _id: req.params.id }).lean()
+    .populate({path:'comments', populate: {path: 'user', moedel: 'users'}}) // 연쇄적으로 poplulate 하는 방식! 여러번 엮인 테이블들의 데이터를 불러올 수 있다.
+    .populate('user')
         .then(post => {
 
             Category.find({}).lean()
             .then(categories => {
-                res.render('home/post', { post: post, categories: categories });
+                res.render('home/post', { post: post, categories: categories, loggeduser: req.userData['user'] });
             })
         });
 
 })
+
 
 module.exports = router;

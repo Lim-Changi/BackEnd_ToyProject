@@ -11,6 +11,7 @@ router.all('/*',verifyToken,(req,res,next)=>{
 //이 파일에서 router을 실행하기전에 우선적으로 실행시켜주는 코드
 
     req.app.locals.layout = 'admin';
+    req.user = req.userData['user'];
     next();
 
 });
@@ -20,18 +21,8 @@ router.all('/*',verifyToken,(req,res,next)=>{
 
 router.get('/', (req, res) => {
 
-    const token = req.cookies['authorization']
+    res.render('admin/index',{loggeduser: req.user});
 
-    jwt.verify(token, 'secretKey', (err, authData) => {
-        if (err) res.sendStatus(403);
-
-        if (authData) {
-
-            res.render('admin/index',{loggeduser: authData.user});
-        }
-
-
-    })
 })
 
 router.post('/generate-fake-posts',(req,res)=>{
