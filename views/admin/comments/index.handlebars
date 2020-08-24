@@ -6,6 +6,7 @@
       <th scope="col">id</th>
       <th scope="col">Post</th>
       <th scope="col">User</th>
+      <th scope="col">Status</th>
       <th scope="col">Date</th>
     </tr>
   </thead>
@@ -16,6 +17,8 @@
         <td>{{_id}}</td>
         <td>{{post.title}}</td>
         <td>{{user.lastName}}</td>
+        <td><input data-id="{{_id}}" type="checkbox" {{#if approveComment}} checked {{/if}} name = "approveComment"></td> 
+        {{!-- AJAX (footer.handlebars) 에 data-id 변수로 comment 데이터의 id 전송 --}}
         <td>{{generateTime date 'MMMM Do YYYY'}}</td>
         <td>
 

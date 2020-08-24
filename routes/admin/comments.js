@@ -33,6 +33,7 @@ router.post('/',(req,res)=>{
 
             newComment.save().then(savedComment=>{
 
+                req.flash('success_message', '댓글이 성공적으로 작성되었습니다.  Admin창에서 공개여부를 선택할 수 있습니다');
                 res.redirect(`/post/${post.id}`);
 
 
@@ -76,6 +77,19 @@ router.delete('/:id',(req,res)=>{
 
 })
 
+router.post('/approve-comment',(req,res)=>{
+
+    Comment.findByIdAndUpdate(req.body.id, {$set: {approveComment : req.body.approveComment}},(err,result)=>{
+
+        if(err) return err
+        res.send(result);
+
+
+    })
+
+
+})
+//AJAX on/off 스위치로 Boolean 값 만들기
 
 
 

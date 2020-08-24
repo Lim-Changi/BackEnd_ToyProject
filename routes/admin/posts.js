@@ -117,7 +117,7 @@ router.put('/edit/:id', (req, res) => {
                 req.flash('success_message',`Post was edited successfully`);
 
                 console.log('Post Updated');
-                res.redirect('/admin/posts');
+                res.redirect('/admin/posts/my-posts');
 
             }).catch(error => {
                 console.log(error);
@@ -161,7 +161,7 @@ router.delete('/:id', (req, res) => {
 
 
             req.flash('success_message', 'Post was deleted successfully');
-            res.redirect('/admin/posts');
+            res.redirect('/admin/my-posts');
             console.log('Post Deleted');
 
         }).catch(err => {
@@ -240,7 +240,7 @@ router.post('/create', (req, res) => {
             req.flash('success_message',`Post was created successfully`);
 
             console.log('Post Saved');
-            res.redirect('/admin/posts');
+            res.redirect('/admin/my-posts');
 
 
         }).catch(error => {
