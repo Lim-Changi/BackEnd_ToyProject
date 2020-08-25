@@ -5,6 +5,8 @@ const faker = require('faker');
 const User = require('../../models/User');
 const {verifyToken} = require('../../helpers/jwt-verify');
 const jwt = require('jsonwebtoken');
+const Category = require('../../models/Category');
+const Comment = require('../../models/Comment');
 
 
 router.all('/*',verifyToken,(req,res,next)=>{
@@ -21,8 +23,42 @@ router.all('/*',verifyToken,(req,res,next)=>{
 
 router.get('/', (req, res) => {
 
-    res.render('admin/index',{loggeduser: req.user});
+    const promises = [
 
+        Post.countDocuments().exec(),
+        Post.countDocuments({user: req.user}).exec(),
+        Category.countDocuments().exec(),
+        Comment.countDocuments({user: req.user}).exec(),
+
+    ];
+
+    Promise.all(promises).then(([postCount,mypostCount,categCount,mycomCount])=>{
+        res.render('admin/index', { 
+            loggeduser: req.user,
+            postCount: postCount,
+            categCount: categCount,
+            mycomCount: mycomCount,
+            mypostCount: mypostCount 
+        });
+
+
+    }) //아래와 같지만 훨씬 간단한 방법으로 코드를 짤 수 있는 장점이 존재한다! >>> 순서를 잘 지켜야한다 !!!
+
+    // Post.countDocuments().then(postCount => {
+    //     Post.countDocuments({ user: req.user }).then(mypostCount => {
+    //         Category.countDocuments().then(categCount => {
+    //             Comment.countDocuments({user: req.user}).then(mycomCount => {
+    //                 res.render('admin/index', { 
+    //                     loggeduser: req.user,
+    //                     postCount: postCount,
+    //                     categCount: categCount,
+    //                     mycomCount: mycomCount,
+    //                     mypostCount: mypostCount 
+    //                 });
+    //             })
+    //         })
+    //     })
+    // })
 })
 
 router.post('/generate-fake-posts',(req,res)=>{
@@ -31,6 +67,7 @@ router.post('/generate-fake-posts',(req,res)=>{
     for(i; i < req.body.amount; i++){
 
         let post = new Post();
+        post.user = req.user;
         post.title = faker.name.title();
         post.status = faker.random.arrayElement(["Public","Draft","Private"]); //랜덤 배열에서 가짜 데이터 삽입
         post.body = faker.lorem.sentences();

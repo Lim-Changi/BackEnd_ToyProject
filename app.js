@@ -58,8 +58,8 @@ app.use((req,res,next)=>{
 // route에서 req.flash를 쓸때는 res.redirect 전에 먼저 코드를 작성해야한다!!
 
 // View Engine
-const {select,generateTime} = require('./helpers/handlebars-helpers');
-app.engine('handlebars',exphbs({defaultLayout: 'home',helpers : {select : select, generateTime: generateTime}}));
+const {select,generateTime,paginate} = require('./helpers/handlebars-helpers');
+app.engine('handlebars',exphbs({defaultLayout: 'home',helpers : {select : select, generateTime: generateTime, paginate:paginate}}));
 //views폴더의 layouts 폴더에서 home.handlebars 파일을 기본적으로 적용시켜준다
 //어떠한 서버 위치에 handlebars파일을 적용시켜도 기본 레이아웃으로 적용시킨다
 app.set('view engine','handlebars');

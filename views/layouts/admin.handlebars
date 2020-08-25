@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>SB Admin - Start Bootstrap Template</title>
+  <title>Admin - ToyProject</title>
   <!-- Bootstrap core CSS-->
   <link href="/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->
@@ -40,7 +40,7 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
+        {{!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-fw fa-envelope"></i>
             <span class="d-lg-none">Messages
@@ -128,7 +128,7 @@
               </span>
             </div>
           </form>
-        </li>
+        </li> --}}
         <li class="nav-item">
           <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
             <i class="fa fa-user">{{#if loggeduser}}{{loggeduser.lastName}}{{/if}} </i><i class="fa fa-fw fa-sign-out"></i>Logout</a>

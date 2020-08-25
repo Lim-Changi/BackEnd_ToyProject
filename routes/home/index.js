@@ -18,15 +18,33 @@ router.all('/*', (req, res, next) => {
 
 router.get('/', (req, res) => {
 
-    Post.find({}).lean().
-        then(posts => {
+    const perPage = 10;
+    const page = req.query.page || 1;
 
-            Category.find({}).lean().
+    Post.find({}).lean()
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .then(posts => {
+
+            Post.countDocuments().then(postCount=>{
+
+                Category.find({}).lean().
                 then(categories => {
 
-                    res.render('home/index', { posts: posts, categories: categories });
+                    res.render('home/index', { 
+                        posts: posts,
+                        categories: categories,
+                        current: parseInt(page),
+                        pages: Math.ceil(postCount / perPage) 
+                    });
 
                 })
+
+
+
+            })
+
+            
 
         })
 

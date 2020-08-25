@@ -3,6 +3,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
 const Schema = mongoose.Schema;
+const URLSlugs = require('mongoose-url-slugs');
 
 const PostSchema = new Schema({
 
@@ -19,6 +20,7 @@ const PostSchema = new Schema({
         required: true
 
     },
+    
 
     status : {
 
@@ -59,6 +61,7 @@ const PostSchema = new Schema({
         ref: 'categories'
     },
 // categories 스키마의 id값을 필드값으로 받는다
+
 
     comments: [{
         type: Schema.Types.ObjectId,
