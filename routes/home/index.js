@@ -142,43 +142,50 @@ router.post('/register', (req, res) => {
     .then(user=>{
         if(user){
 
-            req.flash('error_message', 'Email already exists');
+            req.flash('error_message', '이메일이 이미 존재합니다');
 
             res.redirect('/register');
 
 
         }else{
+            if(req.body.password !== req.body.passwordConfirm)
+            {
+                req.flash('error_message', '비밀번호 확인이 일치하지 않습니다');
+                res.redirect('/register');
+            }else{
+                const newUser = new User({
 
-            const newUser = new User({
-
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                email: req.body.email,
-                password: req.body.password
-        
-        
-            });
-        
-            //해싱 작업 bcrypt 모듈 사용
-        
-            bcrypt.genSalt(10, (err, salt) => {
-        
-                bcrypt.hash(newUser.password, salt, (err, hash) => {
-        
-                    newUser.password = hash;
-        
-                    newUser.save().then(savedUser => {
-        
-                        req.flash('success_message', 'You are now registerd, Please Login');
-        
-                        res.redirect('/login');
-        
-        
-                    });
-        
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    password: req.body.password
+            
+            
+                });
+            
+                //해싱 작업 bcrypt 모듈 사용
+            
+                bcrypt.genSalt(10, (err, salt) => {
+            
+                    bcrypt.hash(newUser.password, salt, (err, hash) => {
+            
+                        newUser.password = hash;
+            
+                        newUser.save().then(savedUser => {
+            
+                            req.flash('success_message', 'You are now registerd, Please Login');
+            
+                            res.redirect('/login');
+            
+            
+                        });
+            
+                    })
+            
                 })
-        
-            })
+
+            }
+           
 
         }
 
