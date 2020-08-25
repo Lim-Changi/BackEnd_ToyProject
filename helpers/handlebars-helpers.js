@@ -60,7 +60,7 @@ module.exports = {
 
         }
 
-        if(options.hash.current === options.hash.pages){
+        if(options.hash.current === options.hash.pages || options.hash.pages === 0){
 
             output += `<li class = "page-item disabled "><a class= "page-link">Last</a></li>`;
 
@@ -72,7 +72,7 @@ module.exports = {
 
 
         return output;
-        console.log(options.hash.current);
+        // console.log(options.hash.current);
 
 
     }
