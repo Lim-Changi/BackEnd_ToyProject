@@ -24,6 +24,7 @@ router.get('/', (req, res) => {
     Post.find({}).lean()
         .skip((perPage * page) - perPage)
         .limit(perPage)
+        .populate('user')
         .then(posts => {
 
             Post.countDocuments().then(postCount=>{
